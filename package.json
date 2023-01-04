@@ -5,6 +5,12 @@
   "repository": "https://github.com/JOAOSC17/todo-backend-graphql.git",
   "author": "João Costa <costav1402@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "test:watch": "npm test -- --watch",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage"
+  },
   "dependencies": {
     "@types/jest": "^29.2.5",
     "@types/node": "^18.11.18",
