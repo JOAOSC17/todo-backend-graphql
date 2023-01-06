@@ -1,3 +1,8 @@
 type Query {
-  info: String!
+  todos: [Todo!]!
+}
+type Todo {
+  _id: String!
+  task: String!
+  status: String!
 }
