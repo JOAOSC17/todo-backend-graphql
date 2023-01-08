@@ -6,3 +6,6 @@ type Todo {
   task: String!
   status: String!
 }
+type Mutation {
+  todo(task: String!, status: String!): Todo!
+}
