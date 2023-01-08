@@ -1,7 +1,9 @@
 import { Context } from "koa";
 import { Todo } from "./model/task";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import typeDefs from "./schema.graphql";
+import 'babel-plugin-import-graphql'
+/// <reference path="../graphql.d.ts" />
+import typeDefs from './schema.graphql';
 
 const resolvers = {
   Query: {
