@@ -13,5 +13,5 @@
     "sourceMap": true,
   },
   "lib": ["es2015"],
-  "include": ["src"],
+  "include": ["src", "graphql.d.ts", "graphql.d.ts"],
 }
