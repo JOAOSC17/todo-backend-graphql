@@ -36,7 +36,9 @@ export function connect() {
       });
   });
 }
-
+export async function disconnectDatabase () {
+   await mongoose.disconnect()
+}
 export async function clearDatabase() {
     for (const i in mongoose.connection.collections) {
       await mongoose.connection.collections[i].drop();
