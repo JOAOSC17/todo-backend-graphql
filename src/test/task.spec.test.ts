@@ -4,24 +4,27 @@ import { schema } from '../schema'
 import {
   Todo,
 } from '../model/task';
-import { connect } from './mongooseConnection';
-
-beforeAll(() => connect())
-it('should be show all tasks', async () => {
-  const query = `
+import { clearDatabase, connect, disconnectDatabase } from './mongooseConnection';
+describe('CRUD Tasks', () => {
+  beforeAll(() => connect()) 
+  afterAll(() => {
+    disconnectDatabase()
+    // clearDatabase()
+  });
+  it('should be show all tasks', async () => {
+    const source = `
     query{
-        todos{
-          _id,
-          task,
-          status
-        }
-  }
-  `;
-
-  const rootValue = {};
-  const context = {};
-
-  const result = await graphql(schema, query);
-  const { data } = result;
-console.log(data);
-});
+      todos{
+        _id,
+        task,
+        status,
+      }
+    }
+    `;
+  
+    const result = await graphql({ schema, source })
+    const todos = await Todo.find()
+    const testArray = todos.map(todo => {return {_id:todo._id, task:todo.task, status: todo.status}})
+    expect(result.data?.todos).toMatchObject(testArray)
+  })
+})
