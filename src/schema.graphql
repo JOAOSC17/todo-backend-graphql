@@ -1,5 +1,5 @@
 type Query {
-  todos: [Todo!]!
+  todos(_id:String, task:String, status: String): [Todo]!
 }
 type Todo {
   _id: String!
