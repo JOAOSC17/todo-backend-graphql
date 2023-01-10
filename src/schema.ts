@@ -19,7 +19,6 @@ const resolvers = {
   Mutation: {
     todo: async (parent: unknown, args: { task: string, status: string }, context: Context) => {
       try {
-          console.log(args)
           const {_id, task, status} = await Todo.create({
             task:args.task,
             status:args.status

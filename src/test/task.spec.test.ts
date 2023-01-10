@@ -11,6 +11,22 @@ describe('CRUD Tasks', () => {
     disconnectDatabase()
     // clearDatabase()
   });
+  it('should be create new task',  async () => {
+    const todo = {
+      task: 'conectar a api',
+      status:'in progress'
+    }
+    const source = `
+    mutation{
+      todo (task:"${todo.task}", status: "${todo.status}"){
+        task,
+        status
+      }
+    }
+    `;
+    const result = await graphql({ schema, source })
+    expect(result.data?.todo).toMatchObject(todo)
+  })
   it('should be show all tasks', async () => {
     const source = `
     query{
