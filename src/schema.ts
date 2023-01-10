@@ -7,9 +7,14 @@ import typeDefs from './schema.graphql';
 
 const resolvers = {
   Query: {
-    todos: async (parent: unknown, args: {}, context: Context) => {
+    todos: async (parent: unknown, args: { _id: string, task: string, status: string }, context: Context) => {
       try {
-          return await Todo.find();
+        const argsCondition = args._id !== undefined || args.task !== undefined  || args.status !== undefined 
+        const todos =  await Todo.find(argsCondition ?{ $or:[{ _id: args._id}, {task: args.task}, {status: args.status }]} : {});
+        if(todos.length === 0) {
+          throw new Error("No one todo was find");
+        }
+        return todos
       } catch(ex) {
           console.log(ex);
           throw new Error("Error in search");
