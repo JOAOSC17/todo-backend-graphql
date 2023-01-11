@@ -6,7 +6,7 @@ import {
 } from '../model/task';
 import { clearDatabase, connect, disconnectDatabase } from './mongooseConnection';
 describe('CRUD Tasks', () => {
-  beforeAll(() => connect()) 
+  beforeAll(() => connect())
   afterAll(() => {
     disconnectDatabase()
     // clearDatabase()
@@ -42,5 +42,24 @@ describe('CRUD Tasks', () => {
     const todos = await Todo.find()
     const testArray = todos.map(todo => {return {_id:todo._id, task:todo.task, status: todo.status}})
     expect(result.data?.todos).toMatchObject(testArray)
+  })
+  it('should be show single task', async () => {
+    const todos = await Todo.find()
+    const randomNumber = Math.floor(Math.random() * (todos.length - 1))
+    const todoExample = todos[randomNumber]
+    const source = `
+    query{
+      todos(_id:"${todoExample._id}", task:"${todoExample.task}", status:"${todoExample.status}"){
+        _id,
+        task,
+        status,
+      }
+    }
+    `;
+  
+    const result = await graphql({ schema, source })
+    const testArray = await Todo.find({ $or:[{ _id: todoExample._id}, {task: todoExample.task}, {status: todoExample.status }]})
+    const testSearch = testArray.map(todo => {return {_id:todo._id, task:todo.task, status: todo.status}})
+    expect(result.data?.todos).toMatchObject(testSearch)
   })
 })
