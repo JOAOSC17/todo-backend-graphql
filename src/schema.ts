@@ -33,7 +33,25 @@ const resolvers = {
           console.log(ex);
           throw new Error("Error in create todo");
       }
-  } 
+  },
+  updateTodo: async (parent: unknown, args: { _id:string, task: string, status: string }, context: Context) => {
+    try {
+      if (!args._id) return;
+        return await Todo.findOneAndUpdate(
+         {
+           _id: args._id
+         },
+         {
+           $set: {
+             task: args.task,
+             status: args.status,
+           }
+         }, {new: true})
+    } catch(ex) {
+        console.log(ex);
+        throw new Error("Error in update todo");
+    }
+},
   }
 }
 
