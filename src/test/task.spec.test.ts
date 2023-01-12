@@ -87,4 +87,28 @@ describe('CRUD Tasks', () => {
     expect(result.data?.updateTodo).toHaveProperty('status')
     expect(result.data?.updateTodo).toMatchObject(todoExample)
   })
+  it('should be delete task', async () => {
+    const todos = await Todo.find()
+    const randomNumber = Math.floor(Math.random() * (todos.length - 1))
+    const todoExample = {
+      _id:todos[randomNumber]._id,
+      task:todos[randomNumber].task,
+      status:todos[randomNumber].status
+    }
+    const source = `
+    mutation{
+      deleteTodo(_id:"${todoExample._id}"){
+        _id,
+        task,
+        status,
+      }
+    }
+    `;
+  
+    const result = await graphql({ schema, source })
+    expect(result.data?.deleteTodo).toHaveProperty('_id')
+    expect(result.data?.deleteTodo).toHaveProperty('task')
+    expect(result.data?.deleteTodo).toHaveProperty('status')
+    expect(result.data?.deleteTodo).toMatchObject(todoExample)
+  })
 })
