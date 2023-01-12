@@ -62,4 +62,24 @@ describe('CRUD Tasks', () => {
     const testSearch = testArray.map(todo => {return {_id:todo._id, task:todo.task, status: todo.status}})
     expect(result.data?.todos).toMatchObject(testSearch)
   })
+  it('should be update task', async () => {
+    const todos = await Todo.find()
+    const randomNumber = Math.floor(Math.random() * (todos.length - 1))
+    const todoExample = todos[randomNumber]
+    const status = ['pending', 'complete', 'in progress']
+    const source = `
+    mutation{
+      updateTodo(_id:"${todoExample._id}", task:"${todoExample.task} test", status:"${status[Math.floor(Math.random() * 2)]}"){
+        _id,
+        task,
+        status,
+      }
+    }
+    `;
+  
+    const result = await graphql({ schema, source })
+    expect(result.data?.updateTodo).toHaveProperty('_id')
+    expect(result.data?.updateTodo).toHaveProperty('task')
+    expect(result.data?.updateTodo).toHaveProperty('status')
+  })
 })
