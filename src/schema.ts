@@ -52,6 +52,15 @@ const resolvers = {
         throw new Error("Error in update todo");
     }
 },
+  deleteTodo: async (parent: unknown, args: { _id:string }, context: Context) => {
+    try {
+      if (!args._id) return;
+        return await Todo.findOneAndDelete({_id:args._id});
+    } catch(ex) {
+        console.log(ex);
+        throw new Error("Error in delete todo");
+    }
+},
   }
 }
 
