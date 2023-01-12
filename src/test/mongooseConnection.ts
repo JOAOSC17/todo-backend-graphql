@@ -2,23 +2,13 @@ import mongoose from 'mongoose';
 
 process.env.NODE_ENV = 'test';
 
-const config = {
-  db: {
-    test: 'mongodb://localhost/test',
-  },
-  connection: null,
-};
-
 export function connect() {
   return new Promise<void>((resolve, reject) => {
-    if (config.connection) {
+    if (!!mongoose.connection.readyState) {
       return resolve();
     }
 
     const mongoUri = 'mongodb://localhost/test';
-
-    mongoose.Promise = Promise;
-
     
     mongoose.connect(mongoUri);
 
