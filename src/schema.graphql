@@ -9,4 +9,5 @@ type Todo {
 type Mutation {
   todo(task: String!, status: String!): Todo!
   updateTodo(_id:String!, task:String, status: String): Todo!
+  deleteTodo(_id:String!): Todo!
 }
