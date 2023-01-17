@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  # node api service
+  api:
+    build: .
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    ports:
+      - 4000:3000
+    environment:
+      PORT: 3000
+      MONGODB_URI: ${MONGO_URL}
