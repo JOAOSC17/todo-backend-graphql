@@ -45,7 +45,7 @@ async function main () {
     server.use(bodyParser())
     server.use(router.allowedMethods())
     server.use(router.routes())
-    server.listen(3000, () => {
+    server.listen(process.env.PORT || 3000, () => {
         console.log('Application is running on port 3000')
     })
 }
