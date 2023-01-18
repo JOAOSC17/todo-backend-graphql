@@ -21,7 +21,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Install Railway
-        run: yarn install -g @railway/cli
+        run: yarn global add @railway/cli
 
       - name: Deploy
         run: railway up
