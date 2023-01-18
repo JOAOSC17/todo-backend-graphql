@@ -27,3 +27,4 @@ jobs:
         run: railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          MONGO_URL: ${{ secrets.MONGO_URL }}
