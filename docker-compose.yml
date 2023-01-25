@@ -5,8 +5,8 @@ services:
   api:
     build: .
     volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
+      - .:/usr/src/app/
+      - /usr/src/app/node_modules
     ports:
       - 4000:3000
     environment:
