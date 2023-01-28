@@ -1,13 +1,24 @@
 type Query {
   todos(_id:String, task:String, status: String): [Todo]!
 }
+type User {
+  _id: String!
+  name: String!
+  email: String!
+  password: String!
+}
 type Todo {
   _id: String!
   task: String!
   status: String!
 }
+type AuthPayload {
+  token: String
+  user: User
+}
 type Mutation {
   todo(task: String!, status: String!): Todo!
   updateTodo(_id:String!, task:String, status: String): Todo!
   deleteTodo(_id:String!): Todo!
+  register(name: String!, email: String!, password: String!): AuthPayload!
 }
