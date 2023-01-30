@@ -6,6 +6,7 @@ import bodyParser from 'koa-bodyparser'
 import cors from '@koa/cors';
 import { schema } from './schema'
 import mongoose from 'mongoose'
+import { contextFactory } from 'context'
 import * as dotenv from "dotenv";
 dotenv.config();
 async function main () {
@@ -38,6 +39,7 @@ async function main () {
             operationName,
             query,
             variables,
+            contextFactory: (req) => req,
         })
         sendResult(result, ctx.res)
     })
