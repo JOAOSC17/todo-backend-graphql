@@ -3,7 +3,7 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import 'babel-plugin-import-graphql'
 /// <reference path="../graphql.d.ts" />
 import typeDefs from './schema.graphql';
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { User } from "./model/user";
 import { sign } from "jsonwebtoken";
 import { GraphQLContext } from "context";
@@ -81,7 +81,23 @@ const resolvers = {
         console.log(error)
         throw new Error("Error in register your user")
       }
-    }
+    },
+    login:async (parent: unknown, args: { email: string, password: string }, context: GraphQLContext) => {
+      try {
+        const user = await User.findOne({ email: args.email });
+        if (!user) throw new Error("No such user found");
+        const valid = await compare(args.password, user.password)
+        if(!valid) throw new Error("Invalid password")
+
+        const token = sign({userId: user._id}, privateKey)
+        //context.cookies.set(process.env.COOKIE_NAME as string , token, { domain:"127.0.0.1", path: "/", httpOnly: true }))
+        return { token, user }
+      } catch (error) {
+        console.log(error)
+        throw new Error("Error in register your user")
+      }
+    },
+
   }
 }
 
