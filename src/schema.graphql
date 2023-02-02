@@ -21,4 +21,5 @@ type Mutation {
   updateTodo(_id:String!, task:String, status: String): Todo!
   deleteTodo(_id:String!): Todo!
   register(name: String!, email: String!, password: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
 }
