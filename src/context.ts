@@ -1,17 +1,17 @@
 import mongoose, { Mongoose } from "mongoose";
-import { BaseRequest, Context } from "koa";
-import { User } from "model/user";
-import { authenticateUser } from "auth";
+import { BaseRequest } from "koa";
+import { User } from "./model/user";
+import { authenticateUser } from "./auth";
 
 
 export type GraphQLContext = {
     mongoose: Mongoose;
-    currentUser: typeof User;
+    currentUser: typeof User | null;
 };
 
-export async function contextFactory(request: Context) : Promise<GraphQLContext>{
+export async function contextFactory(request: BaseRequest) : Promise<GraphQLContext>{
     return {
         mongoose,
-        currentUser: await authenticateUser(request) as typeof User
+        currentUser: await authenticateUser(request)
     };
   }
