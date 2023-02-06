@@ -9,10 +9,10 @@ import mongoose from 'mongoose'
 import { contextFactory } from './context'
 import * as dotenv from "dotenv";
 dotenv.config();
+const server = new Koa()
+const router = new Router()
 async function main () {
-    const url = process.env.MONGO_URL as string
-    const router = new Router()
-    const server = new Koa()
+    const url = process.env.NODE_ENV = 'test' ? 'mongodb://localhost/test' : process.env.MONGO_URL as string
     await mongoose.connect(url)
     console.log('Connected to MongoDb')
     router.register('/graphql', ['get', 'post'], async (ctx, next) => {
@@ -47,8 +47,9 @@ async function main () {
     server.use(bodyParser())
     server.use(router.allowedMethods())
     server.use(router.routes())
-    server.listen(process.env.PORT || 3000, () => {
-        console.log('Application is running on port 3000')
-    })
+    
 }
 main()
+export const app = server.listen(process.env.PORT || 3000, () => {
+    console.log('Application is running on port 3000')
+})
