@@ -5,8 +5,9 @@ import {
   User,
 } from '../model/user';
 import { clearDatabase, connect, disconnectDatabase } from './mongooseConnection';
+import { faker } from '@faker-js/faker';
 interface User {
-    _id:string;
+    _id?:string;
     name:string;
     email:string;
     password:string;
@@ -16,17 +17,20 @@ interface AuthPayload {
     user: User
 }
 describe('CRUD User', () => {
-    beforeAll(() => connect())
+    let user: User;
+    beforeAll(() => {
+        connect()
+        user = {
+            name:faker.name.fullName(),
+            email:faker.internet.email(),
+            password:faker.internet.password()
+        }
+    })
     afterAll(() => {
       disconnectDatabase()
       // clearDatabase()
     });
     it('should be register new user and login', async () => {
-        const user = {
-            name:'Jhon Doe',
-            email:'jhondoe@email.com',
-            password:'123'
-        }
         const source = `
             mutation{
                 register(name:"${user.name}", email:"${user.email}", password:"${user.password}"){
@@ -48,11 +52,6 @@ describe('CRUD User', () => {
     expect(authPayload?.user).toHaveProperty('name')
     })
     it('should be login', async () => {
-        const user = {
-            name:'Jhon Doe',
-            email:'jhondoe@email.com',
-            password:'123'
-        }
         const source = `
             mutation{
                 login(email:"${user.email}", password:"${user.password}"){
