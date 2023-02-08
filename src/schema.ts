@@ -3,15 +3,19 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import 'babel-plugin-import-graphql'
 /// <reference path="../graphql.d.ts" />
 import typeDefs from './schema.graphql';
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { User } from "./model/user";
 import { sign } from "jsonwebtoken";
 import { GraphQLContext } from "context";
-const privateKey = process.env.SECRET || 'test'
+
+import * as dotenv from "dotenv";
+dotenv.config();
+const privateKey = process.env.JWT_SECRET as string
 const resolvers = {
   Query: {
     todos: async (parent: unknown, args: { _id: string, task: string, status: string }, context: GraphQLContext) => {
       try {
+        if(context.currentUser === null) throw new Error('Unauthenticated')
         const argsCondition = args._id !== undefined || args.task !== undefined  || args.status !== undefined 
         const todos =  await Todo.find(argsCondition ?{ $or:[{ _id: args._id}, {task: args.task}, {status: args.status }]} : {});
         if(todos.length === 0) {
@@ -27,6 +31,7 @@ const resolvers = {
   Mutation: {
     todo: async (parent: unknown, args: { task: string, status: string }, context: GraphQLContext) => {
       try {
+        if(context.currentUser === null) throw new Error('Unauthenticated')
           const {_id, task, status} = await Todo.create({
             task:args.task,
             status:args.status
@@ -39,6 +44,7 @@ const resolvers = {
   },
   updateTodo: async (parent: unknown, args: { _id:string, task: string, status: string }, context: GraphQLContext) => {
     try {
+      if(context.currentUser === null) throw new Error('Unauthenticated')
       if (!args._id) return;
         return await Todo.findOneAndUpdate(
          {
@@ -57,6 +63,7 @@ const resolvers = {
 },
   deleteTodo: async (parent: unknown, args: { _id:string }, context: GraphQLContext) => {
     try {
+      if(context.currentUser === null) throw new Error('Unauthenticated')
       if (!args._id) return;
         return await Todo.findOneAndDelete({_id:args._id});
     } catch(ex) {
@@ -74,14 +81,30 @@ const resolvers = {
           email:args.email,
           password:password
         })
-        const token = sign({userId: user._id}, privateKey)
+        const token = sign({userId: user._id}, privateKey, {expiresIn: '1d'})
         //context.cookies.set(process.env.COOKIE_NAME as string , token, { domain:"127.0.0.1", path: "/", httpOnly: true }))
         return { token, user }
       } catch (error) {
         console.log(error)
         throw new Error("Error in register your user")
       }
-    }
+    },
+    login:async (parent: unknown, args: { email: string, password: string }, context: GraphQLContext) => {
+      try {
+        const user = await User.findOne({ email: args.email });
+        if (!user) throw new Error("No such user found");
+        const valid = await compare(args.password, user.password)
+        if(!valid) throw new Error("Invalid password")
+
+        const token = sign({userId: user._id}, privateKey, {expiresIn: '1d'})
+        //context.cookies.set(process.env.COOKIE_NAME as string , token, { domain:"127.0.0.1", path: "/", httpOnly: true }))
+        return { token, user }
+      } catch (error) {
+        console.log(error)
+        throw new Error("Error in register your user")
+      }
+    },
+
   }
 }
 
