@@ -18,7 +18,7 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 const server = new Koa()
 const router = new Router()
-const url = (process.env.NODE_ENV = 'test'
+const url = (process.env.NODE_ENV === 'test'
     ? 'mongodb://localhost/test'
     : (process.env.MONGO_URL as string))
 mongoose.connect(url).then(()=> console.log('Connected to MongoDb'))
