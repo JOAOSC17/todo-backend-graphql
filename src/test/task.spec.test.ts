@@ -14,7 +14,7 @@ import {
     disconnectDatabase,
 } from './mongooseConnection'
 import supertest from 'supertest'
-import { app } from './../index'
+import app  from './../index'
 interface AuthPayload {
     token: string
     user: typeof User
