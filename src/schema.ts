@@ -1,7 +1,5 @@
 import { Todo } from "./model/task";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import 'babel-plugin-import-graphql'
-/// <reference path="../graphql.d.ts" />
 import typeDefs from './schema.graphql';
 import { compare, hash } from "bcryptjs";
 import { User } from "./model/user";
