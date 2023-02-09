@@ -1,13 +1,8 @@
-import mongoose from 'mongoose'
+import { User, Todo } from '../model'
 import { graphql } from 'graphql'
 import { schema } from '../schema'
 import gql from 'graphql-tag'
-import * as http from 'http'
-import { Todo } from '../model/task'
-import koa from 'koa'
-import { User } from '../model/user'
 import { faker } from '@faker-js/faker'
-import { GraphQLContext } from 'context'
 import {
     clearDatabase,
     connect,

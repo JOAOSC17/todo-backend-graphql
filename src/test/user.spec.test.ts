@@ -3,7 +3,7 @@ import { graphql } from 'graphql';
 import { schema } from '../schema'
 import {
   User,
-} from '../model/user';
+} from '../model';
 import { clearDatabase, connect, disconnectDatabase } from './mongooseConnection';
 import { faker } from '@faker-js/faker';
 interface User {

@@ -1,6 +1,6 @@
 import mongoose, { Mongoose } from "mongoose";
 import { BaseRequest } from "koa";
-import { User } from "./model/user";
+import { User } from "./model";
 import { authenticateUser } from "./auth";
 
 

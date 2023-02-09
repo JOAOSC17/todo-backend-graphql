@@ -1,6 +1,6 @@
 import { BaseRequest, Context } from 'koa'
 import { JwtPayload, verify } from 'jsonwebtoken'
-import { User } from './model/user';
+import { User } from './model';
 
 export async function authenticateUser(request: BaseRequest): Promise<typeof User | null>{
   const secret = process.env.JWT_SECRET as string

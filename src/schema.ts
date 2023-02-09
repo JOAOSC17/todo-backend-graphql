@@ -1,8 +1,7 @@
-import { Todo } from "./model/task";
+import { User, Todo } from "./model";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from './schema.graphql';
 import { compare, hash } from "bcryptjs";
-import { User } from "./model/user";
 import { sign } from "jsonwebtoken";
 import { GraphQLContext } from "context";
 
